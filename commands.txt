@@ -1,0 +1,227 @@
+conda create -n wineq2 python=3.8 -y
+
+conda activate wineq2
+
+108  touch requirements.txt
+  
+109  pip install -r requirements.txt
+
+touch template.py
+
+
+template.py
+-----------
+
+
+import os
+
+dirs = [
+    os.path.join("data", "raw"),
+    os.path.join("data", "processed"),
+    "notebooks",
+    "saved_models",
+    "src"
+]
+
+for dir_ in dirs :
+    os.makedirs(dir_, exist_ok=True)
+    with open(os.path.join(dir_, ".gitkeep"), "w") as f :
+        pass
+
+
+files = [
+    "dvc.yaml",
+    "params.yaml",
+    ".gitignore",
+    os.path.join("src", "__init__.py")
+
+]
+
+for file_ in files :
+    with open(file_, "w") as f :
+        pass
+    
+
+
+
+
+
+python template.py 
+
+
+DOWNLOAD DATA files
+
+https://drive.google.com/drive/folders/18zqQiCJVgF7uzXgfbIJ-04zgz1ItNfF5?usp=sharing
+
+
+mkdir data_given
+copy downloaded csv file in data_given folder 
+
+
+115  git init
+  116  dvc init
+  117  dvc add data_given/winequality.csv
+  118  git add .
+  119  git commit -m "first commit"
+
+
+git add . && git commit -m "update 1"
+
+
+git remote add origin https://github.com/vishymails/simple_app.git
+git branch -M main
+git push -u origin main
+
+
+
+create params.yaml
+
+
+
+128  python src/get_data.py 
+  129  python src/get_data.py 
+  130  python src/get_data.py 
+  131  git add . && git commit -m "get_data added "
+  132  git push -u origin main
+  133  python src/load_data.py 
+  134  python src/load_data.py 
+  135  python src/load_data.py 
+  136  python src/load_data.py 
+  138  git add . && git commit -m "load_data added "
+git push -u origin main
+
+
+update stage 1 in dvc.yaml file 
+
+
+ 43  dvc repro
+   44  git rm -r --cached 'data/raw/winequality.csv'
+   45              git commit -m "stop tracking data/raw/winequality.csv" 
+   46  dvc repro
+   47  dvc repro
+   48  dvc repro
+   49  git add . && git commit -m "stage1 added"
+   50  git push origin main
+
+   create split_data.py and add stage in dvc.yaml
+
+   dvc repro
+
+
+   create train_and_evaluate.py
+
+   dvc repro
+
+   70  git add . && git commit -m "train and evaluate updated"
+   71  git push origin main
+
+
+   72  dvc metrics show
+   
+   73  dvc params diff
+   
+   75  dvc metrics diff
+   
+   change params.yaml
+
+   estimators:
+  ElasticNet:
+    params:
+  ->  alpha: 0.88
+  ->  l1_ratio: 0.89
+      # alpha: 0.9
+      # l1_ratio: 0.4
+model_dir: saved_models
+
+   76  dvc repro
+   77  dvc params diff
+   78  dvc metrics show
+   79  dvc metrics diff
+
+   
+
+   test case using tox framework
+
+   1  clear
+    2  touch tox.ini
+    3  pytest -v
+    4  mkdir tests
+    5  touch tests/conftest.py
+    6  touch tests/test_config.py
+    7  touch tests/__init__.py
+    8  pytest -v
+
+    running tox 
+  
+    tox
+
+
+
+    rebuild env for tox
+
+    tox -r 
+
+
+
+ 23  pip install -e .
+   24  pip freeze
+
+
+
+
+   build your own packages for distribution 
+
+   25  python setup.py sdist bdist_wheel
+
+
+
+
+35  mkdir -p prediction_service/model
+   36  mkdir webapp
+   37  touch app.py
+   38  touch prediction_service/__init__.py
+   39  touch prediction_service/prediction.py
+   40  mkdir -p webapp/static/css
+   41  mkdir -p webapp/static/script
+   42  touch webapp/static/css/main.css
+   43  touch webapp/static/script/index.js
+  
+   46  touch webapp/templates/index.hmtl
+   47  mkdir webapp/templates
+   48  mkdir webapp/templates
+   50  touch webapp/templates/index.html
+   51  touch webapp/templates/404.html
+   52  touch webapp/templates/base.html
+
+  git add . && git commit -m "webapp added and updated"
+  git push origin main
+
+
+
+ 60  python app.py
+   61  git add . && git commit -m "webapp page updated1"
+   62    git push origin main
+
+
+
+update app.py
+
+cp saved_models/model.joblib prediction_service/model/
+
+python app.py
+
+
+  73  pyhton app.py
+   74  python app.py
+   75  pip install jupyterlab
+   76  jupyter-lab notebooks/
+   77  python app.py
+   78  jupyter-lab notebooks/
+   79  python app.py
+   80  git add . && git commit -m "webapp page updated1"
+   81  pip install jupyterlab
+   82    git push origin main
+
+
+
+   
